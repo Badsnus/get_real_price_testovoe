@@ -12,6 +12,7 @@ from dto import (
     Property,
     SubCategory,
 )
+from transfer_data_to_excel import ExcelWriter
 
 ua = UserAgent()
 
@@ -54,7 +55,6 @@ class Parser:
                     return await response.json()
                 except Exception as ex:  # TODO
                     print(ex)
-                    ...
 
     async def get_categories(self) -> Categories:
         categories = Categories([], [], [])
@@ -153,28 +153,33 @@ class Parser:
                     # если честно
                     await asyncio.gather(*tasks)
                     tasks.clear()
+
         return products
 
-    async def get_items(self):
+    async def get_items(self) -> list[list[Product]]:
+        items = []
+
         cats = await self.get_categories()
         for sub_category in cats.man + cats.woman + cats.kid:
             formatted_name = self.__format_subcategory_input_data(sub_category)
             if formatted_name not in self.__need_subcategories:
                 continue
-            items = await self.get_items_by_subcategory(sub_category)
+            items.append(await self.get_items_by_subcategory(sub_category))
+
+        return items
 
 
 async def main():
-    parser = Parser(
-        'https://www.zara.com/kz/ru',
-        [
-            NeedSubCategories('РУБАШКИ', 'МУЖЧИНЫ'),
-            # NeedSubCategories('ФУТБОЛКИ', 'ЖЕНЩИНЫ'),
-        ],
-    )
-    # print(await parser.get_categories())
-    shit = await parser.get_items()
-    print(shit)
+    data = [
+        NeedSubCategories('РУБАШКИ', 'МУЖЧИНЫ'),
+        # NeedSubCategories('ФУТБОЛКИ', 'ЖЕНЩИНЫ'),
+    ]
+    parser = Parser('https://www.zara.com/kz/ru', data)
+    items = await parser.get_items()
+    for products, subcategory in zip(items, data):
+        filename = f'{subcategory.category_name}-{subcategory.name}'
+        writer = ExcelWriter(filename=filename, products=products)
+        writer.write()
 
 
 asyncio.run(main())

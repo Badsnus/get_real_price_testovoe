@@ -15,6 +15,8 @@ class ExcelWriter:
         self.__products = products
 
     def write(self) -> None:
+        print(self.__products)
+        print(len(self.__products))
         df = pd.DataFrame(
             [[
                 product.vendor_code,
@@ -43,4 +45,4 @@ class ExcelWriter:
                 'added',
             ],
         )
-        df.to_excel(self.__filename)
+        df.to_excel(self.__filename, index=False)
