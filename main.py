@@ -1,5 +1,4 @@
 import asyncio
-import time
 from datetime import datetime
 
 import aiohttp
@@ -170,7 +169,7 @@ class Parser:
         return items
 
 
-async def main():
+async def main() -> None:
     # start = time.time()
     data = [
         # NeedSubCategories('РУБАШКИ', 'МУЖЧИНЫ'),
@@ -183,5 +182,6 @@ async def main():
         writer = ExcelWriter(filename=filename, products=products)
         writer.write()
     # print(time.time() - start)
+
 
 asyncio.run(main())

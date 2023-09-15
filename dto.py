@@ -20,6 +20,7 @@ class Categories:
     kid: list[SubCategory]
 
     def add_item(self, category_name: str, value: SubCategory) -> None:
+        # нахуя это блять пихать в одачу категорий блять!!!
         if value in ['JOIN LIFE', '+ Info']:
             return
         insert_to: list = {
@@ -36,7 +37,7 @@ class Image:
     name: str
     timestamp: str
 
-    def get_url(self):
+    def get_url(self) -> str:
         # ну это бы тоже не вшивать так-то
         return (
             f'https://static.zara.net/photos//{self.path}/{self.name}'
@@ -67,17 +68,17 @@ class Product:
     added: date
 
     @property
-    def category_text(self):
+    def category_text(self) -> str:
         res_text = self.category + ';'
         res_text += ';'.join(map(lambda x: x.name, self.subcategories))
         return res_text
 
     @property
-    def images_text(self):
+    def images_text(self) -> str:
         return ';'.join(image.get_url() for image in self.images)
 
     @property
-    def properties_text(self):
+    def properties_text(self) -> str:
         return ';'.join(
             f'{prop.name}:{prop.description}' for prop in self.properties
         )
