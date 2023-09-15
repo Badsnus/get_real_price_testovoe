@@ -22,12 +22,3 @@ class Parser:
 
     async def get_item_extra_info(self):
         ...
-
-
-class ManParser(Parser):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.category = ''
-
-
-man = ManParser('мужчины')
