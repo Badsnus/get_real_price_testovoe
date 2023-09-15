@@ -1,4 +1,5 @@
 import asyncio
+import time
 from datetime import datetime
 
 import aiohttp
@@ -51,10 +52,10 @@ class Parser:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers) as response:
                 try:
-                    print(response.status)
                     return await response.json()
-                except Exception as ex:  # TODO
-                    print(ex)
+                except Exception as ex:
+                    # ну тут объективно ретраить надо, но я лентяй
+                    raise ex
 
     async def get_categories(self) -> Categories:
         categories = Categories([], [], [])
@@ -170,9 +171,10 @@ class Parser:
 
 
 async def main():
+    # start = time.time()
     data = [
-        NeedSubCategories('РУБАШКИ', 'МУЖЧИНЫ'),
-        # NeedSubCategories('ФУТБОЛКИ', 'ЖЕНЩИНЫ'),
+        # NeedSubCategories('РУБАШКИ', 'МУЖЧИНЫ'),
+        NeedSubCategories('ФУТБОЛКИ', 'ЖЕНЩИНЫ'),
     ]
     parser = Parser('https://www.zara.com/kz/ru', data)
     items = await parser.get_items()
@@ -180,6 +182,6 @@ async def main():
         filename = f'{subcategory.category_name}-{subcategory.name}'
         writer = ExcelWriter(filename=filename, products=products)
         writer.write()
-
+    # print(time.time() - start)
 
 asyncio.run(main())

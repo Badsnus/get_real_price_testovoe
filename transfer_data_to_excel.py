@@ -15,8 +15,6 @@ class ExcelWriter:
         self.__products = products
 
     def write(self) -> None:
-        print(self.__products)
-        print(len(self.__products))
         df = pd.DataFrame(
             [[
                 product.vendor_code,
