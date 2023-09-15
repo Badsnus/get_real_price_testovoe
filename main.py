@@ -1,7 +1,7 @@
 import aiohttp
 from fake_useragent import UserAgent
 
-from dto import Category, Product, Property
+from dto import Categories, Product, Property, SubCategory
 
 ua = UserAgent()
 
