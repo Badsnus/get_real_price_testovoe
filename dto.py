@@ -37,7 +37,11 @@ class Image:
     timestamp: str
 
     def get_url(self):
-        ...
+        # ну это бы тоже не вшивать так-то
+        return (
+            f'https://static.zara.net/photos//{self.path}/{self.name}'
+            f'?ts={self.timestamp}'
+        )
 
 
 @dataclass
@@ -55,8 +59,25 @@ class Product:
     old_price: float | None
     is_active: bool
     description: str
-    categories: list[SubCategory]
+    category: str
+    subcategories: list[SubCategory]
     images: list[Image]
     properties: list[Property]
     url: str
     added: date
+
+    @property
+    def category_text(self):
+        res_text = self.category + ';'
+        res_text += ';'.join(map(lambda x: x.name, self.subcategories))
+        return res_text
+
+    @property
+    def images_text(self):
+        return ';'.join(image.get_url() for image in self.images)
+
+    @property
+    def properties_text(self):
+        return ';'.join(
+            f'{prop.name}:{prop.description}' for prop in self.properties
+        )

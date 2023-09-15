@@ -53,7 +53,6 @@ class Parser:
                     print(response.status)
                     return await response.json()
                 except Exception as ex:  # TODO
-
                     print(ex)
                     ...
 
@@ -124,7 +123,8 @@ class Parser:
                             old_price=color.get('oldPrice'),
                             is_active=color['availability'] == 'in_stock',
                             description=component['description'],
-                            categories=[subcategory],
+                            category=subcategory.category_name,
+                            subcategories=[subcategory],
                             images=[
                                 Image(
                                     path=image['path'],
@@ -143,6 +143,14 @@ class Parser:
                         tasks.append(asyncio.create_task(
                             self.set_product_properties(product),
                         ))
+
+                    # короче сейчас мега медленно из-за того, что эту
+                    # штуку надо
+                    # ниже отпустить и тогда все будет норм - там прост
+                    # упиралось
+                    # в то, что мне не давали данные из-за кучи запросов -
+                    # то есть просто прокси подрубить, мне было мега впадлу
+                    # если честно
                     await asyncio.gather(*tasks)
                     tasks.clear()
         return products
@@ -154,7 +162,6 @@ class Parser:
             if formatted_name not in self.__need_subcategories:
                 continue
             items = await self.get_items_by_subcategory(sub_category)
-            print(items)
 
 
 async def main():
