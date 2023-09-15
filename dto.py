@@ -6,6 +6,7 @@ from datetime import date
 class SubCategory:
     id: int
     name: str
+    category_name: str
 
 
 @dataclass
@@ -13,6 +14,16 @@ class Categories:
     man: list[SubCategory]
     woman: list[SubCategory]
     kids: list[SubCategory]
+
+    def add_item(self, category_name: str, value: SubCategory) -> None:
+        if value in ['JOIN LIFE', '+ Info']:
+            return
+        insert_to: list = {
+            'ЖЕНЩИНЫ': self.woman,
+            'МУЖЧИНЫ': self.man,
+            'ДЕТИ': self.kids,
+        }[category_name]
+        insert_to.append(value)
 
 
 @dataclass
@@ -39,7 +50,7 @@ class Product:
     old_price: float
     is_active: bool
     description: str
-    categories: list[Category]
+    categories: list[SubCategory]
     images: list[Image]
     properties: list[Property]
     url: str
