@@ -3,17 +3,21 @@ from datetime import date
 
 
 @dataclass
-class SubCategory:
-    id: int
+class NeedSubCategories:
     name: str
     category_name: str
+
+
+@dataclass
+class SubCategory(NeedSubCategories):
+    id: int
 
 
 @dataclass
 class Categories:
     man: list[SubCategory]
     woman: list[SubCategory]
-    kids: list[SubCategory]
+    kid: list[SubCategory]
 
     def add_item(self, category_name: str, value: SubCategory) -> None:
         if value in ['JOIN LIFE', '+ Info']:
@@ -21,7 +25,7 @@ class Categories:
         insert_to: list = {
             'ЖЕНЩИНЫ': self.woman,
             'МУЖЧИНЫ': self.man,
-            'ДЕТИ': self.kids,
+            'ДЕТИ': self.kid,
         }[category_name]
         insert_to.append(value)
 
@@ -30,6 +34,7 @@ class Categories:
 class Image:
     path: str
     name: str
+    timestamp: str
 
     def get_url(self):
         ...
@@ -47,7 +52,7 @@ class Product:
     vendor_code: str
     name: str
     price: float
-    old_price: float
+    old_price: float | None
     is_active: bool
     description: str
     categories: list[SubCategory]
