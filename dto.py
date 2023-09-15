@@ -3,8 +3,16 @@ from datetime import date
 
 
 @dataclass
-class Category:
+class SubCategory:
+    id: int
     name: str
+
+
+@dataclass
+class Categories:
+    man: list[SubCategory]
+    woman: list[SubCategory]
+    kids: list[SubCategory]
 
 
 @dataclass
@@ -24,6 +32,7 @@ class Property:
 
 @dataclass
 class Product:
+    id: int
     vendor_code: str
     name: str
     price: float
